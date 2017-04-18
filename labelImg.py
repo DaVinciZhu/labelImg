@@ -37,8 +37,10 @@ from labelFile import LabelFile, LabelFileError
 from toolBar import ToolBar
 from pascal_voc_io import PascalVocReader
 from pascal_voc_io import XML_EXT
+from login import *
 
 __appname__ = 'labelImg'
+
 
 # Utility functions and classes.
 
@@ -99,6 +101,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
+        self.username = 'Default_Main'
         # Save as Pascal voc xml
         self.defaultSaveDir = None
         self.usingPascalVocFormat = True
@@ -182,12 +185,12 @@ class MainWindow(QMainWindow, WindowMixin):
         self.canvas.drawingPolygon.connect(self.toggleDrawingSensitive)
 
         self.setCentralWidget(scroll)
-        self.addDockWidget(Qt.RightDockWidgetArea, self.dock)
-        # Tzutalin 20160906 : Add file list and dock to move faster
-        self.addDockWidget(Qt.RightDockWidgetArea, self.filedock)
-        self.dockFeatures = QDockWidget.DockWidgetClosable\
-            | QDockWidget.DockWidgetFloatable
-        self.dock.setFeatures(self.dock.features() ^ self.dockFeatures)
+        # self.addDockWidget(Qt.RightDockWidgetArea, self.dock)
+        # # Tzutalin 20160906 : Add file list and dock to move faster
+        # self.addDockWidget(Qt.RightDockWidgetArea, self.filedock)
+        # self.dockFeatures = QDockWidget.DockWidgetClosable\
+        #     | QDockWidget.DockWidgetFloatable
+        # self.dock.setFeatures(self.dock.features() ^ self.dockFeatures)
 
         # Actions
         action = partial(newAction, self)
@@ -356,7 +359,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         self.tools = self.toolbar('Tools')
         self.actions.beginner = (
-            open, opendir, openNextImg, openPrevImg, verify, save, None, create, copy, delete, None,
+            open, opendir, openNextImg, openPrevImg, save, None, create, copy, delete, None,
             zoomIn, zoom, zoomOut, fitWindow, fitWidth)
 
         self.actions.advanced = (
@@ -451,6 +454,18 @@ class MainWindow(QMainWindow, WindowMixin):
         self.zoomWidget.valueChanged.connect(self.paintCanvas)
 
         self.populateModeActions()
+
+    def login(self):
+        dialog = LoginDialog()
+        dialog.Signal_User.connect(self.getUserName)
+        if dialog.exec_():
+            return True
+        else:
+            return False
+
+    def getUserName(self,usr):
+        # print 'getUserName:',usr
+        self.username = usr
 
     ## Support Functions ##
 
@@ -660,6 +675,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.canvas.loadShapes(s)
 
     def saveLabels(self, annotationFilePath):
+        # print '678:', annotationFilePath
         annotationFilePath = u(annotationFilePath)
         if self.labelFile is None:
             self.labelFile = LabelFile()
@@ -679,10 +695,10 @@ class MainWindow(QMainWindow, WindowMixin):
             if self.usingPascalVocFormat is True:
                 print ('Img: ' + self.filePath +
                        ' -> Its xml: ' + annotationFilePath)
-                self.labelFile.savePascalVocFormat(annotationFilePath, shapes, self.filePath, self.imageData,
+                self.labelFile.savePascalVocFormat(self.username,annotationFilePath, shapes, self.filePath, self.imageData,
                                                    self.lineColor.getRgb(), self.fillColor.getRgb())
             else:
-                self.labelFile.save(annotationFilePath, shapes, self.filePath, self.imageData,
+                self.labelFile.save(self.username, annotationFilePath, shapes, self.filePath, self.imageData,
                                     self.lineColor.getRgb(), self.fillColor.getRgb())
             return True
         except LabelFileError as e:
@@ -1050,13 +1066,17 @@ class MainWindow(QMainWindow, WindowMixin):
                 imgFileName)[0] + LabelFile.suffix
             savedPath = os.path.join(
                 str(self.defaultSaveDir), savedFileName)
+            # print '1068:',savedPath
             self._saveFile(savedPath)
         else:
+            # savePath = self.filePath if self.labelFile else self.saveFileDialog()
+            # print '1071:',self.labelFile, ' ?',self.saveFileDialog(),' ??',savePath
             self._saveFile(self.filePath if self.labelFile
                            else self.saveFileDialog())
 
     def saveFileAs(self, _value=False):
         assert not self.image.isNull(), "cannot save empty image"
+        # print '1080:',self.saveFileDialog()
         self._saveFile(self.saveFileDialog())
 
     def saveFileDialog(self):
@@ -1225,22 +1245,31 @@ def read(filename, default=None):
         return default
 
 
+
 def get_main_app(argv=[]):
     """
     Standard boilerplate Qt application code.
     Do everything but app.exec_() -- so that we can test the application in one thread
     """
+
     app = QApplication(argv)
     app.setApplicationName(__appname__)
     app.setWindowIcon(newIcon("app"))
     win = MainWindow(argv[1] if len(argv) == 2 else None)
-    win.show()
-    return app, win
+    if win.login():
+        # win.login()
+        win.show()
+        return app, win
 
 
 def main(argv):
     '''construct main app and run it'''
+    global __appname__
     app, _win = get_main_app(argv)
+    __appname__ = __appname__ + '_' + _win.username
+    print __appname__
+    _win.setWindowTitle(__appname__)
+    # print _win.username
     return app.exec_()
 
 if __name__ == '__main__':

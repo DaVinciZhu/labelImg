@@ -12,9 +12,14 @@ XML_EXT = '.xml'
 
 class PascalVocWriter:
 
-    def __init__(self, foldername, filename, imgSize, databaseSrc='Unknown', localImgPath=None):
+    def __init__(self, username, foldername, filename, imgSize, databaseSrc='Unknown', localImgPath=None):
+        # print 'filename is ',filename,'type:',type(filename)
+        # print 'username is ',username,'type:',type(username)
+        self.username = unicode(username)
         self.foldername = foldername
         self.filename = filename
+
+        # self.boxmaker = boxmaker
         self.databaseSrc = databaseSrc
         self.imgSize = imgSize
         self.boxlist = []
@@ -41,6 +46,9 @@ class PascalVocWriter:
 
         top = Element('annotation')
         top.set('verified', 'yes' if self.verified else 'no')
+
+        user = SubElement(top, 'username')
+        user.text = self.username
 
         folder = SubElement(top, 'folder')
         folder.text = self.foldername

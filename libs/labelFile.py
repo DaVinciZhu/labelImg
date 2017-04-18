@@ -26,20 +26,23 @@ class LabelFile(object):
         self.imageData = None
         self.verified = False
 
-    def savePascalVocFormat(self, filename, shapes, imagePath, imageData,
+    def savePascalVocFormat(self, username, filename, shapes, imagePath, imageData,
                             lineColor=None, fillColor=None, databaseSrc=None):
         imgFolderPath = os.path.dirname(imagePath)
         imgFolderName = os.path.split(imgFolderPath)[-1]
         imgFileName = os.path.basename(imagePath)
         imgFileNameWithoutExt = os.path.splitext(imgFileName)[0]
+
         # Read from file path because self.imageData might be empty if saving to
         # Pascal format
         image = QImage()
         image.load(imagePath)
         imageShape = [image.height(), image.width(),
                       1 if image.isGrayscale() else 3]
-        writer = PascalVocWriter(imgFolderName, imgFileNameWithoutExt,
+        writer = PascalVocWriter(username,imgFolderName, imgFileNameWithoutExt,
                                  imageShape, localImgPath=imagePath)
+
+        # print imgFileNameWithoutExt
         writer.verified = self.verified
 
         for shape in shapes:
@@ -47,7 +50,10 @@ class LabelFile(object):
             label = shape['label']
             bndbox = LabelFile.convertPoints2BndBox(points)
             writer.addBndBox(bndbox[0], bndbox[1], bndbox[2], bndbox[3], label)
-
+        # print '???',filename
+        if filename.split('.')[1] == 'jpg':
+            filename = filename.split('.')[0] + '.xml'
+        # print '!!!???',filename
         writer.save(targetFile=filename)
         return
 
