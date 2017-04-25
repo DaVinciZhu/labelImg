@@ -59,9 +59,10 @@ class PascalVocWriter:
         localImgPath = SubElement(top, 'path')
         localImgPath.text = self.localImgPath
 
-        source = SubElement(top, 'source')
-        database = SubElement(source, 'database')
-        database.text = self.databaseSrc
+    #>>>> delete(3)
+        # source = SubElement(top, 'source')
+        # database = SubElement(source, 'database')
+        # database.text = self.databaseSrc
 
         size_part = SubElement(top, 'size')
         width = SubElement(size_part, 'width')
@@ -73,31 +74,32 @@ class PascalVocWriter:
             depth.text = str(self.imgSize[2])
         else:
             depth.text = '1'
-
-        segmented = SubElement(top, 'segmented')
-        segmented.text = '0'
+    #>>>> delete(3)
+        # segmented = SubElement(top, 'segmented')
+        # segmented.text = '0'
         return top
 
-    def addBndBox(self, xmin, ymin, xmax, ymax, name):
+    def addBndBox(self, xmin, ymin, xmax, ymax):#delete(1), name
         bndbox = {'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax}
-        bndbox['name'] = name
+        #delete (1) bndbox['name'] = name
         self.boxlist.append(bndbox)
 
     def appendObjects(self, top):
         for each_object in self.boxlist:
             object_item = SubElement(top, 'object')
-            name = SubElement(object_item, 'name')
-            try:
-                name.text = unicode(each_object['name'])
-            except NameError:
-                # Py3: NameError: name 'unicode' is not defined
-                name.text = each_object['name']
-            pose = SubElement(object_item, 'pose')
-            pose.text = "Unspecified"
-            truncated = SubElement(object_item, 'truncated')
-            truncated.text = "0"
-            difficult = SubElement(object_item, 'difficult')
-            difficult.text = "0"
+        #>>>> delete(3)
+            #name = SubElement(object_item, 'name')
+            # try:
+            #     name.text = unicode(each_object['name'])
+            # except NameError:
+            #     # Py3: NameError: name 'unicode' is not defined
+            #     name.text = each_object['name']
+            # pose = SubElement(object_item, 'pose')
+            # pose.text = "Unspecified"
+            # truncated = SubElement(object_item, 'truncated')
+            # truncated.text = "0"
+            # difficult = SubElement(object_item, 'difficult')
+            # difficult.text = "0"
             bndbox = SubElement(object_item, 'bndbox')
             xmin = SubElement(bndbox, 'xmin')
             xmin.text = str(each_object['xmin'])
@@ -136,13 +138,13 @@ class PascalVocReader:
     def getShapes(self):
         return self.shapes
 
-    def addShape(self, label, bndbox):
+    def addShape(self,  bndbox):#delete(3) label,
         xmin = int(bndbox.find('xmin').text)
         ymin = int(bndbox.find('ymin').text)
         xmax = int(bndbox.find('xmax').text)
         ymax = int(bndbox.find('ymax').text)
         points = [(xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax)]
-        self.shapes.append((label, points, None, None))
+        self.shapes.append(( points, None, None))#delete(3) label,
 
     def parseXML(self):
         assert self.filepath.endswith('.xml'), "Unsupport file format"
@@ -158,8 +160,8 @@ class PascalVocReader:
 
         for object_iter in xmltree.findall('object'):
             bndbox = object_iter.find("bndbox")
-            label = object_iter.find('name').text
-            self.addShape(label, bndbox)
+            #delete(3) label = object_iter.find('name').text
+            self.addShape(bndbox)#delete(1) label,
         return True
 
 

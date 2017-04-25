@@ -1,0 +1,19 @@
+<annotation verified="no">
+  <username>zyp</username>
+  <folder>Imgs</folder>
+  <filename>fanyiguan_20170311_58c3a2ffbe8d1</filename>
+  <path>/home/zyp/NetEase/Labelbox/Imgs/fanyiguan_20170311_58c3a2ffbe8d1.jpg</path>
+  <size>
+    <width>1080</width>
+    <height>1469</height>
+    <depth>3</depth>
+  </size>
+  <object>
+    <bndbox>
+      <xmin>130</xmin>
+      <ymin>385</ymin>
+      <xmax>222</xmax>
+      <ymax>432</ymax>
+    </bndbox>
+  </object>
+</annotation>

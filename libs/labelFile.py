@@ -47,9 +47,9 @@ class LabelFile(object):
 
         for shape in shapes:
             points = shape['points']
-            label = shape['label']
+            #>>>delete(1) label = shape['label']
             bndbox = LabelFile.convertPoints2BndBox(points)
-            writer.addBndBox(bndbox[0], bndbox[1], bndbox[2], bndbox[3], label)
+            writer.addBndBox(bndbox[0], bndbox[1], bndbox[2], bndbox[3])#>>>delete(1), label
         # print '???',filename
         if filename.split('.')[1] == 'jpg':
             filename = filename.split('.')[0] + '.xml'

@@ -36,8 +36,8 @@ class Shape(object):
     point_size = 8
     scale = 1.0
 
-    def __init__(self, label=None, line_color=None):
-        self.label = label
+    def __init__(self, line_color=None):#>>> delete(3), label=None
+        #delete(3) self.label = label
         self.points = []
         self.fill = False
         self.selected = False
@@ -59,6 +59,9 @@ class Shape(object):
 
     def close(self):
         self._closed = True
+
+    def setSelected(self,seleted):
+        self.seleted = seleted
 
     def reachMaxPoints(self):
         if len(self.points) >= 4:
@@ -152,6 +155,9 @@ class Shape(object):
         self.points = [p + offset for p in self.points]
 
     def moveVertexBy(self, i, offset):
+        # print 'offset',offset
+        # print 'self.points',self.points
+        # print 'i=',i,' \n',#self.points[i] == None
         self.points[i] = self.points[i] + offset
 
     def highlightVertex(self, i, action):
@@ -162,7 +168,7 @@ class Shape(object):
         self._highlightIndex = None
 
     def copy(self):
-        shape = Shape("%s" % self.label)
+        shape = Shape()#delete(3) "%s" % self.label
         shape.points = [p for p in self.points]
         shape.fill = self.fill
         shape.selected = self.selected

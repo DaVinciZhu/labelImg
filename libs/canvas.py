@@ -121,16 +121,16 @@ class Canvas(QWidget):
                 self.current.highlightClear()
             return
 
-        # Polygon copy moving.
-        if Qt.RightButton & ev.buttons():
-            if self.selectedShapeCopy and self.prevPoint:
-                self.overrideCursor(CURSOR_MOVE)
-                self.boundedMoveShape(self.selectedShapeCopy, pos)
-                self.repaint()
-            elif self.selectedShape:
-                self.selectedShapeCopy = self.selectedShape.copy()
-                self.repaint()
-            return
+        # Polygon copy moving. delete temporary
+        # if Qt.RightButton & ev.buttons():
+        #     if self.selectedShapeCopy and self.prevPoint:
+        #         self.overrideCursor(CURSOR_MOVE)
+        #         self.boundedMoveShape(self.selectedShapeCopy, pos)
+        #         self.repaint()
+        #     elif self.selectedShape:
+        #         self.selectedShapeCopy = self.selectedShape.copy()
+        #         self.repaint()
+        #     return
 
         # Polygon/Vertex moving.
         if Qt.LeftButton & ev.buttons():
@@ -168,8 +168,8 @@ class Canvas(QWidget):
                 if self.selectedVertex():
                     self.hShape.highlightClear()
                 self.hVertex, self.hShape = None, shape
-                self.setToolTip(
-                    "Click & drag to move shape '%s'" % shape.label)
+                # self.setToolTip(
+                #     "Click & drag to move shape '%s'" % 'DELETE!')
                 self.setStatusTip(self.toolTip())
                 self.overrideCursor(CURSOR_GRAB)
                 self.update()
@@ -197,7 +197,7 @@ class Canvas(QWidget):
 
     def mouseReleaseEvent(self, ev):
         if ev.button() == Qt.RightButton:
-            menu = self.menus[bool(self.selectedShapeCopy)]
+            menu = self.menus[0]
             self.restoreCursor()
             if not menu.exec_(self.mapToGlobal(ev.pos()))\
                and self.selectedShapeCopy:
@@ -243,6 +243,9 @@ class Canvas(QWidget):
             targetPos = self.line[1]
             maxX = targetPos.x()
             maxY = targetPos.y()
+            #Don't allow user to draw a no-rectangle
+            if (minX == maxX or minY == maxY):
+                 return
             self.current.addPoint(QPointF(maxX, minY))
             self.current.addPoint(targetPos)
             self.current.addPoint(QPointF(minX, maxY))
@@ -322,6 +325,8 @@ class Canvas(QWidget):
         else:
             lshift = QPointF(shiftPos.x(), 0)
             rshift = QPointF(0, shiftPos.y())
+        # print 'lshift',lshift, ' ',lindex
+        # print 'rshift',rshift, ' ',rindex
         shape.moveVertexBy(rindex, rshift)
         shape.moveVertexBy(lindex, lshift)
 
