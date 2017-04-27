@@ -995,6 +995,7 @@ class MainWindow(QMainWindow, WindowMixin):
         if not self.mayContinue():
             return
         # print 'filePath',self.filePath
+        # print os.path
         path = os.path.dirname(self.filePath)\
             if self.filePath else '.'
 
@@ -1005,7 +1006,7 @@ class MainWindow(QMainWindow, WindowMixin):
                                                     #  '%s - Open Directory' % __appname__, path,  QFileDialog.ShowDirsOnly
                                                     #  | QFileDialog.DontResolveSymlinks))
 
-        # print 'dirpath:',dirpath
+        print 'dirpath:',dirpath
         if dirpath is not None and len(dirpath) > 1:
             self.lastOpenDir = dirpath
 
@@ -1013,7 +1014,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.filePath = self.loadLastFile()
         #>>>> delete(2) self.fileListWidget.clear()
         self.mImgList = self.scanAllImages(dirpath)
-        # print 'mImgList:',self.mImgList
+        print 'mImgList:',self.mImgList
         self._first_ = True
         self.openNextImg()
     #>>>> delete(2)

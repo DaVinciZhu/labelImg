@@ -1,5 +1,5 @@
 <annotation verified="no">
-  <username>zyp</username>
+  <username>123</username>
   <folder>Imgs</folder>
   <filename>fanyiguan_20170311_58c3a6c467a8f</filename>
   <path>/home/zyp/NetEase/Labelbox/labelImg/Imgs/fanyiguan_20170311_58c3a6c467a8f.jpg</path>
@@ -38,6 +38,14 @@
       <ymin>238</ymin>
       <xmax>550</xmax>
       <ymax>260</ymax>
+    </bndbox>
+  </object>
+  <object>
+    <bndbox>
+      <xmin>235</xmin>
+      <ymin>467</ymin>
+      <xmax>374</xmax>
+      <ymax>494</ymax>
     </bndbox>
   </object>
 </annotation>
