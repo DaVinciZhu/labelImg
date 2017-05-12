@@ -1,31 +1,20 @@
-# LabelImg
+# LabelImg_ZYP
 
 [![Build Status](https://travis-ci.org/tzutalin/labelImg.png)](https://travis-ci.org/tzutalin/labelImg)
 
-LabelImg is a graphical image annotation tool.
+LabelImg_ZYP is a express edition of LabelImg which is a powerful graphical image annotation tool.
 
 It is written in Python and uses Qt for its graphical interface.
 
 Annotations are saved as XML files in PASCAL VOC format, the format used by [ImageNet](http://www.image-net.org/).
 
+### Demo
+#### LabelImg_ZYP
+![](demo/demo4.png)
+#### LabelImg 
 ![](demo/demo3.jpg)
 
-[Watch a demo video by author tzutalin](https://youtu.be/p0nR2YsCY_U)
 
-## Get it
-
-### Download prebuilt binaries
-
-* Windows
- * [Download LabelImg 1.2.2 for Windows](https://raw.githubusercontent.com/tzutalin/LabelImg/gh-pages/windows/windows_v1.2.2.zip)
- * [Download LabelImg 1.2.1 for Windows](https://raw.githubusercontent.com/tzutalin/LabelImg/gh-pages/windows/windows_v1.2.1.zip)
- * [Download LabelImg 1.2 for Windows](https://raw.githubusercontent.com/tzutalin/LabelImg/gh-pages/windows/windows_v1.2.zip)
-* Linux
- * [Download LabelImg 1.2.2 for Linux](https://raw.githubusercontent.com/tzutalin/LabelImg/gh-pages/linux/linux_v1.2.2.zip)
- * [Download LabelImg 1.2.1 for Linux](https://raw.githubusercontent.com/tzutalin/LabelImg/gh-pages/linux/linux_v1.2.1.zip)
- * [Download LabelImg 1.2 for Linux](https://raw.githubusercontent.com/tzutalin/LabelImg/gh-pages/linux/linux_v1.2.zip)
-* OS X
- * Binaries for OS X are not yet available. Help would be appreciated. At present it must be [built from source](#os-x).
 
 ### Build from source
 
@@ -60,43 +49,25 @@ Open cmd and go to [labelImg]
 
 ### Steps
 
-1. Build and launch using the instructions above.
-2. Click 'Change default saved annotation folder' in Menu/File
-3. Click 'Open Dir'
+1. Build using the instructions above. 
+2. Put images to the folder named 'Imgs'.
+3. Launch labelImg.py
 4. Click 'Create RectBox'
-5. Click and release left mouse to select a region to annotate the rect box
-6. You can use right mouse to drag the rect box to copy or move it
+3. Click and release left mouse to select a region to annotate the rect box
 
-The annotation will be saved to the folder you specify.
+The annotation will be saved to the folder 'Imgs'.
 
 You can refer to the below hotkeys to speed up your workflow.
-
-### Create pre-defined classes
-
-You can edit the [data/predefined_classes.txt](https://github.com/tzutalin/labelImg/blob/master/data/predefined_classes.txt) to load pre-defined classes
 
 ### Hotkeys
 
 |          |                                          |
 |----------|------------------------------------------|
-| Ctrl + u | Load all of the images from a directory  |
-| Ctrl + r | Change the default annotation target dir |
 | Ctrl + s | Save                                     |
-| Ctrl + d | Copy the current label and rect box      |
-| Space    | Flag the current image as verified       |
 | w        | Create a rect box                        |
 | d        | Next image                               |
 | a        | Previous image                           |
 | del      | Delete the selected rect box             |
 | Ctrl++   | Zoom in                                  |
 | Ctrl--   | Zoom out                                 |
-
-### How to contribute
-Send a pull request
-
-### License
-[License](LICENSE.md)
-
-### Related
-1. [ImageNet Utils](https://github.com/tzutalin/ImageNet_Utils) to download image, create a label text for machine learning, etc
 
