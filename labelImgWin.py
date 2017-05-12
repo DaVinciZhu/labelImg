@@ -425,8 +425,13 @@ class MainWindow(QMainWindow, WindowMixin):
             }
 
         self.settings = settings = Settings(types)
+
+        # newset = QSettings('my_org', 'my_app')
+        # self.recentFiles = newset.value('recentFiles', [], str)
+        # print('read settings: %s' % self.recentFiles)
+
         self.recentFiles = list(settings.get('recentFiles', []))
-        # print '??',settings['recentFiles']
+        # print '??recentFiles',settings['recentFiles'],' ', list(settings.get('recentFiles', []))
         size = settings.get('window/size', QSize(600, 500))
         position = settings.get('window/position', QPoint(0, 0))
         self.resize(size)
@@ -918,6 +923,10 @@ class MainWindow(QMainWindow, WindowMixin):
         if not self.mayContinue():
             event.ignore()
         s = self.settings
+
+        # newset = QSettings('my_org', 'my_app')
+        # newset.setValue('recentFiles', self.recentFiles)
+        # print('save settings: %s' % self.recentFiles)
         # If it loads images from dir, don't load it at the begining
         if self.dirname is None:
             s['filename'] = self.filePath if self.filePath else ''
@@ -930,7 +939,9 @@ class MainWindow(QMainWindow, WindowMixin):
         s['line/color'] = self.lineColor
         s['fill/color'] = self.fillColor
         s['recentFiles'] = self.recentFiles
-        # print 'close:',self.recentFiles
+        # print self.recentFiles[0]
+        open(os.getcwd() + '/Imgs' + '/lastFile.txt','w').write(self.recentFiles[0].split('\\')[-1].split('.')[0])
+        # print 'close recentFiles:',self.recentFiles,' ', s['recentFiles']
         s['advanced'] = not self._beginner
         if self.defaultSaveDir is not None and len(self.defaultSaveDir) > 1:
             s['savedir'] = str(self.defaultSaveDir)
@@ -1025,10 +1036,18 @@ class MainWindow(QMainWindow, WindowMixin):
         #     self.fileListWidget.addItem(item)
     def loadLastFile(self):
         # print '!!=',self.dirname
-        print 'self.recentFiles',self.recentFiles
-
-        lastfile = self.recentFiles[0]#self.dirname + '/' + u(open(self.dirname + '/lastFile.txt','r').read().strip('\n'))
-
+        # print "self.filePath",self.filePath
+        # print 'self.recentFiles',self.recentFiles
+        # if self.recentFiles:
+        #     lastfile = self.recentFiles[0]#self.dirname + '/' + u(open(self.dirname + '/lastFile.txt','r').read().strip('\n'))
+        # else:
+        #     lastfile = None
+        # print os.getcwd()
+        lastImg = u(open(os.getcwd() + '/Imgs' + '/lastFile.txt','r').read().strip('\n'))
+        if(lastImg == ''):
+            lastfile = None
+        else:
+            lastfile = os.getcwd() + '\\Imgs\\' + u(open(os.getcwd() + '/Imgs' + '/lastFile.txt','r').read().strip('\n')) + '.jpg'
         # print 'lastFile =',lastfile
         return lastfile
 
@@ -1276,11 +1295,13 @@ class Settings(object):
         return self._cast(key, self.data.value(key))
 
     def get(self, key, default=None):
+        # print 'self.data.value(key,default)=',self.data.value(key, default)
         return self._cast(key, self.data.value(key, default))
 
     def _cast(self, key, value):
         # XXX: Very nasty way of converting types to QVariant methods :P
         t = self.types.get(key)
+        # print 'key=',key,'t:',t
         if t is not None and t != QVariant:
             if t is str:
                 return str(value)
@@ -1288,10 +1309,13 @@ class Settings(object):
                 try:
                     method = getattr(QVariant, re.sub(
                         '^Q', 'to', t.__name__, count=1))
+                    # print 'value1=',method(value)
                     return method(value)
                 except AttributeError as e:
                     # print(e)
+                    # print 'value2=',value
                     return value
+        # print 'value3=',value
         return value
 
 
