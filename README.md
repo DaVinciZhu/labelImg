@@ -10,7 +10,7 @@ Annotations are saved as XML files in PASCAL VOC format, the format used by [Ima
 
 ### Demo
 #### LabelImg_ZYP
-![](demo/demo4.png)
+![](demo/demo4.jpg)
 #### LabelImg 
 ![](demo/demo3.jpg)
 
